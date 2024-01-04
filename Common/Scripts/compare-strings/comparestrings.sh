@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+# A very minimalist string comparison script. 
+
 if [ $# -ne 2 ]; then
     echo "Please provide 2 strings for comparison"
     exit -1
