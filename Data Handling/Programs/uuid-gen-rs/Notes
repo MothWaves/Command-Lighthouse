@@ -1,4 +1,7 @@
 Roadmap:
 
-- Add proper options parsing, potentially with getopts crate.
+- Add proper options parsing, potentially with getopts crate (yes, with getopts crate).
 - Make tool generate other versions of uuid.
+
+Apparently linux-utils already comes with a C version of this program. However, it does have some differences and doesn't support certain UUID versions, so I will still continue this project.
+Might move this to it's own repository?
