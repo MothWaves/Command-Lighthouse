@@ -5,4 +5,11 @@ edition = "2021"
 
 [dependencies.uuid]
 version = "1.6.1"
-features = ["v4"]
+features = [
+         "std",
+         "v3",
+         "v4",
+         "v5",
+         "v6",
+         "v7"
+         ]

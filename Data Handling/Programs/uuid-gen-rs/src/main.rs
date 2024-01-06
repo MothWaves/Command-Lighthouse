@@ -19,9 +19,14 @@ fn main() {
     exit(0);
 }
 
-fn generate_uuids(number: u32) {
-    for _ in 0..number {
-        println!("{}", Uuid::new_v4());
+fn generate_uuids(number: u32, version: uuid::Version) {
+    match version {
+        Nil => {for _ in 0..number { println!("{}", Uuid::nil()); }},
+        Random => {for _ in 0..number { println!("{}", Uuid::new_v4()); }},
+        Sha1 => {for _ in 0..number { println!("{}", Uuid::new_v5()); }},
+        SortMac => {for _ in 0..number { println!("{}", Uuid::new_v6()); }},
+        SortRand => {for _ in 0..number { println!("{}", Uuid::new_v7()); }},
+        Max => {for _ in 0..number { println!("{}", Uuid::max()); }},
     }
 }
 
