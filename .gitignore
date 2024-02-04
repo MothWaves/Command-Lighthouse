@@ -3,4 +3,4 @@ target/
 
 # Ignore static projects
 ## Ignored so the exit_flag can be changed at will when actually using the program without git noticing.
-File Management/Programs/batch_rename_append.py
+File\ Management/Programs/batch_rename_append.py
