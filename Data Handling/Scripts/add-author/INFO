@@ -1,0 +1,6 @@
+Small sh script that prompts user for an "Author" and then inserts that author into the metadata of a given image.
+
+It will add the given user input to the following tags:
+Exif.Image.Artist
+Iptc.Application2.Byline
+Xmp.dc.creator
