@@ -16,6 +16,7 @@ DONE - Make it take in a file and choose a random line.
 DONE - Add artificial timer
 DONE - Add command-line option to disable timer.
 ABANDONED - Add functionality for multiline options maybe a special syntax for the files.
+- Add command-line option to change timer flavor text.
 =end
 
 require 'optparse'
