@@ -18,6 +18,7 @@ DONE - Add artificial timer
 - Add functionality for multiline options maybe a special syntax for the files.
 =end
 
+# Artificial timer with some flavor text.
 def spin_timer
     print "Spinning the wheel"
     for _ in 1..3
@@ -28,31 +29,47 @@ def spin_timer
     puts;puts
 end
 
-if (ARGV.length != 1)
-  puts "wheel-rb [ERR]: Incorrect number of arguments."
-  Process.exit!(false)
-end
-filename = ARGV[0]
+# Opens and  returns file given as command-line argument.
+def open_file
+    if (ARGV.length != 1)
+    puts "wheel-rb [ERR]: Incorrect number of arguments."
+    Process.exit!(false)
+    end
+    filename = ARGV[0]
 
-if (not File.file?(filename))
-  puts "wheel-rb [ERR]: Given file is not a regular file."
-  Process.exit!(false)
-end
-f = File.new(filename, 'r')
-if (f.eof?)
-  puts "No options given!"
-  Process.exit!(true)
+    if (not File.file?(filename))
+    puts "wheel-rb [ERR]: Given file is not a regular file."
+    Process.exit!(false)
+    end
+    f = File.new(filename, 'r')
+    if (f.eof?)
+    puts "No options given!"
+    Process.exit!(true)
+    end
+    return f
 end
 
-options = Array.new()
-while not f.eof?
-  options << f.readline()
+# Returns Array with all of the options from provided file.
+def get_options(file)
+    options = Array.new()
+    while not file.eof?
+        options << file.readline()
+    end
+    return options
 end
+
+# Randomly chooses an option from array of options.
+def randomly_choose_option(options)
+    option = options.sample()
+    return option
+end
+
+
+f = open_file
+options = get_options f
 f.close()
-
 spin_timer
-
-option = options.sample()
+option = randomly_choose_option options
 
 puts option
 Process.exit!(true)
