@@ -21,17 +21,22 @@ ABANDONED - Add functionality for multiline options maybe a special syntax for t
 
 require 'optparse'
 
-Options = Struct.new(:timer)
+Options = Struct.new(:timer, :text)
+$args
 
 class Parser
     def self.parse(options)
-        args = Options.new(true)
+        args = Options.new(true, "Spinning the Wheel")
 
         opt_parser = OptionParser.new do |parser|
             parser.banner = "Usage: wheel [options]"
 
             parser.on("--instant", "-t", "Skips Spinning wheel timer.") do
                 args.timer = false
+            end
+
+            parser.on("--text TEXT", "-p", "Changes flavor text of Spinning wheel timer.") do |arg|
+                args.text = arg
             end
 
             parser.on("-h", "--help", "Prints this help") do
@@ -52,13 +57,16 @@ def handle_arg_options
     rescue OptionParser::InvalidOption => e
       puts "wheel-rb [ERR]: #{e}"
       Process.exit!(false)
+    rescue OptionParser::MissingArgument
+        puts "wheel-rb [ERR]: Missing Argument"
+        Process.exit!(false)
     end
     return args
 end
 
 # Artificial timer with some flavor text.
 def spin_timer
-    print "Spinning the wheel"
+    print $args.text
     for _ in 1..3
         sleep 0.7
         print "."
@@ -103,11 +111,11 @@ def randomly_choose_option(options)
 end
 
 
-args = handle_arg_options
+$args = handle_arg_options
 f = open_file
 options = get_options f
 f.close()
-if args.timer == true
+if $args.timer == true
     spin_timer
 end
 option = randomly_choose_option options
