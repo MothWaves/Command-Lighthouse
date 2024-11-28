@@ -13,9 +13,20 @@ randomly choose one of those options.
 
 =begin todo
 DONE - Make it take in a file and choose a random line.
-- Add artificial timer
+DONE - Add artificial timer
+- Add command-line option to disable timer.
 - Add functionality for multiline options maybe a special syntax for the files.
 =end
+
+def spin_timer
+    print "Spinning the wheel"
+    for _ in 1..3
+        sleep 0.7
+        print "."
+    end
+    sleep 1.0
+    puts;puts
+end
 
 if (ARGV.length != 1)
   puts "wheel-rb [ERR]: Incorrect number of arguments."
@@ -38,6 +49,8 @@ while not f.eof?
   options << f.readline()
 end
 f.close()
+
+spin_timer
 
 option = options.sample()
 
