@@ -46,7 +46,13 @@ end
 
 # Handles command-line flags
 def handle_arg_options
-    Parser.parse ARGV
+    begin 
+      args = Parser.parse ARGV
+    rescue OptionParser::InvalidOption => e
+      puts "wheel-rb [ERR]: #{e}"
+      Process.exit!(false)
+    end
+    return args
 end
 
 # Artificial timer with some flavor text.
