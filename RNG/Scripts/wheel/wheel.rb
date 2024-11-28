@@ -14,9 +14,40 @@ randomly choose one of those options.
 =begin todo
 DONE - Make it take in a file and choose a random line.
 DONE - Add artificial timer
-- Add command-line option to disable timer.
-- Add functionality for multiline options maybe a special syntax for the files.
+DONE - Add command-line option to disable timer.
+ABANDONED - Add functionality for multiline options maybe a special syntax for the files.
 =end
+
+require 'optparse'
+
+Options = Struct.new(:timer)
+
+class Parser
+    def self.parse(options)
+        args = Options.new(true)
+
+        opt_parser = OptionParser.new do |parser|
+            parser.banner = "Usage: wheel [options]"
+
+            parser.on("--instant", "-t", "Skips Spinning wheel timer.") do
+                args.timer = false
+            end
+
+            parser.on("-h", "--help", "Prints this help") do
+                puts parser
+                exit
+            end
+        end
+
+        opt_parser.parse!(options)
+        return args
+    end
+end
+
+# Handles command-line flags
+def handle_arg_options
+    Parser.parse ARGV
+end
 
 # Artificial timer with some flavor text.
 def spin_timer
@@ -65,10 +96,13 @@ def randomly_choose_option(options)
 end
 
 
+args = handle_arg_options
 f = open_file
 options = get_options f
 f.close()
-spin_timer
+if args.timer == true
+    spin_timer
+end
 option = randomly_choose_option options
 
 puts option
