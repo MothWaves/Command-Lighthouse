@@ -57,7 +57,7 @@ def spin_timer
         print "."
     end
     sleep 1.0
-    puts;puts
+    puts
 end
 
 # Opens and  returns file given as command-line argument.
