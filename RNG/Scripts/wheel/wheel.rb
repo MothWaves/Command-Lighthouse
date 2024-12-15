@@ -20,16 +20,16 @@ DONE - Add command-line option to change timer flavor text.
 DONE - Add functionality for outputting more than one option (but never the same option twice)
   Essentially, this would loop for a given number of times and each time it outputs a choice it would remove that choice and print another option.
   The flavor text should not roll in between each option.
-- Add functionality that automatically outputs all available options.
+DONE - Add functionality that automatically outputs all available options.
 =end
 
 require 'optparse'
 
-Options = Struct.new(:timer, :text, :choice_number)
+Options = Struct.new(:timer, :text, :choice_number, :print_all)
 
 class Parser
     def self.parse(options)
-        args = Options.new(true, "Spinning the Wheel", 1)
+        args = Options.new(true, "Spinning the Wheel", 1, false)
 
         opt_parser = OptionParser.new do |parser|
             parser.banner = "Usage: wheel [options]"
@@ -38,11 +38,19 @@ class Parser
                 args.timer = false
             end
 
+            parser.on("-a", "--print-all", "Chooses every option (in a random order).") do
+                args.print_all = true
+            end
+
             parser.on("--text TEXT", "-p", "Changes flavor text of Spinning wheel timer.") do |arg|
                 args.text = arg
             end
 
             parser.on("-n", "--choices COUNT", "Specifies how many unique choices should be chosen.") do |arg|
+                if args.print_all
+                    puts_error "Can't have -n and -a at the same time."
+                    Process.exit!(false)
+                end
                 count = arg.to_i
                 if count <= 0 then
                     puts_error "Choice count too low or invalid."
@@ -141,12 +149,18 @@ if $args.timer == true
 end
 # Choose from option(s)
 choices = Array.new()
-for _ in 1..$args.choice_number do
-    if options.empty?
-        choices.append("No more options to choose from!")
-        break
-    else
+if $args.print_all
+    until options.empty?
         choices.push (randomly_choose_option options)
+    end
+else
+    for _ in 1..$args.choice_number do
+        if options.empty?
+            choices.append("No more options to choose from!")
+            break
+        else
+            choices.push (randomly_choose_option options)
+        end
     end
 end
 
