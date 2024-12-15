@@ -16,7 +16,10 @@ DONE - Make it take in a file and choose a random line.
 DONE - Add artificial timer
 DONE - Add command-line option to disable timer.
 ABANDONED - Add functionality for multiline options maybe a special syntax for the files.
-- Add command-line option to change timer flavor text.
+DONE - Add command-line option to change timer flavor text.
+- Add functionality for outputting more than one option (but never the same option twice)
+  Essentially, this would loop for a given number of times and each time it outputs a choice it would remove that choice and print another option.
+  The flavor text should not roll in between each option.
 =end
 
 require 'optparse'
