@@ -17,19 +17,19 @@ DONE - Add artificial timer
 DONE - Add command-line option to disable timer.
 ABANDONED - Add functionality for multiline options maybe a special syntax for the files.
 DONE - Add command-line option to change timer flavor text.
-- Add functionality for outputting more than one option (but never the same option twice)
+DONE - Add functionality for outputting more than one option (but never the same option twice)
   Essentially, this would loop for a given number of times and each time it outputs a choice it would remove that choice and print another option.
   The flavor text should not roll in between each option.
+- Add functionality that automatically outputs all available options.
 =end
 
 require 'optparse'
 
-Options = Struct.new(:timer, :text)
-$args
+Options = Struct.new(:timer, :text, :choice_number)
 
 class Parser
     def self.parse(options)
-        args = Options.new(true, "Spinning the Wheel")
+        args = Options.new(true, "Spinning the Wheel", 1)
 
         opt_parser = OptionParser.new do |parser|
             parser.banner = "Usage: wheel [options]"
@@ -40,6 +40,15 @@ class Parser
 
             parser.on("--text TEXT", "-p", "Changes flavor text of Spinning wheel timer.") do |arg|
                 args.text = arg
+            end
+
+            parser.on("-n", "--choices COUNT", "Specifies how many unique choices should be chosen.") do |arg|
+                count = arg.to_i
+                if count <= 0 then
+                    puts_error "Choice count too low or invalid."
+                    Process.exit!(false)
+                end
+                args.choice_number = count
             end
 
             parser.on("-h", "--help", "Prints this help") do
@@ -53,15 +62,19 @@ class Parser
     end
 end
 
+def puts_error text
+    puts "wheel-rb [ERR]: " + text
+end
+
 # Handles command-line flags
 def handle_arg_options
     begin 
       args = Parser.parse ARGV
     rescue OptionParser::InvalidOption => e
-      puts "wheel-rb [ERR]: #{e}"
-      Process.exit!(false)
+        puts_error "#{e}"
+        Process.exit!(false)
     rescue OptionParser::MissingArgument
-        puts "wheel-rb [ERR]: Missing Argument"
+        puts_error "Missing Argument"
         Process.exit!(false)
     end
     return args
@@ -109,19 +122,36 @@ end
 
 # Randomly chooses an option from array of options.
 def randomly_choose_option(options)
-    option = options.sample()
-    return option
+    rnd = Random.rand(options.length)
+    choice = options[rnd]
+    options.delete_at(rnd)
+    return choice
 end
 
 
+## Main:
 $args = handle_arg_options
+# Read File
 f = open_file
 options = get_options f
 f.close()
+
 if $args.timer == true
     spin_timer
 end
-option = randomly_choose_option options
+# Choose from option(s)
+choices = Array.new()
+for _ in 1..$args.choice_number do
+    if options.empty?
+        choices.append("No more options to choose from!")
+        break
+    else
+        choices.push (randomly_choose_option options)
+    end
+end
 
-puts option
+# Output choice(s)
+for i in choices do
+    puts i
+end
 Process.exit!(true)
