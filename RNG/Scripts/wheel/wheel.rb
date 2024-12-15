@@ -102,7 +102,7 @@ end
 def get_options(file)
     options = Array.new()
     while not file.eof?
-        options << file.readline()
+        options << file.readline().strip!
     end
     return options
 end
