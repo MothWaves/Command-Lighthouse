@@ -25,11 +25,17 @@ DONE - Add functionality that automatically outputs all available options.
 
 require 'optparse'
 
-Options = Struct.new(:timer, :text, :choice_number, :print_all)
+Options = Struct.new(:timer, :text, :choice_number, :print_all, :comments_enabled, :debug_enabled)
 
 class Parser
     def self.parse(options)
-        args = Options.new(true, "Spinning the Wheel", 1, false)
+        args = Options.new(true, #:timer
+                           "Spinning the Wheel", #:text
+                           1, #:choice_number
+                           false, #:print_all
+                           true, #:comments_enabled
+                           false #:debug_enabled
+                          )
 
         opt_parser = OptionParser.new do |parser|
             parser.banner = "Usage: wheel [options]"
@@ -44,6 +50,14 @@ class Parser
 
             parser.on("--text TEXT", "-p", "Changes flavor text of Spinning wheel timer.") do |arg|
                 args.text = arg
+            end
+
+            parser.on("--disable-comments", "-c", "Disables comments, including lines starting with '#' in the wheel results.") do
+                args.comments_enabled = false
+            end
+
+            parser.on("--debug", "Enables debug messages.") do
+                args.debug_enabled = true
             end
 
             parser.on("-n", "--choices COUNT", "Specifies how many unique choices should be chosen.") do |arg|
@@ -67,6 +81,12 @@ class Parser
 
         opt_parser.parse!(options)
         return args
+    end
+end
+
+def puts_debug text
+    if $args.debug_enabled then
+        puts text
     end
 end
 
@@ -123,8 +143,14 @@ end
 def get_options(file)
     options = Array.new()
     while not file.eof?
-        options << file.readline().strip!
+        option = file.readline().strip!
+        if option[0] == "#" and $args.comments_enabled then
+            next
+        else
+            options << option
+        end
     end
+    puts_debug "DEBUG (Possible Options): #{options}"
     return options
 end
 
