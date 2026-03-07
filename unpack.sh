@@ -11,4 +11,6 @@ echo "Unpacking ./Common/Scripts/compare-strings/comparestrings.sh..."
 $copy ./Common/Scripts/compare-strings/comparestrings.sh /usr/local/bin/comparestrings
 echo "Unpacking ./Common/Scripts/oldify/oldify.sh..."
 $copy ./Common/Scripts/oldify/oldify.sh /usr/local/bin/oldify
+echo "Unpacking ./Data Handling/Scripts/add-author/add-author.sh..."
+$copy "./Data Handling/Scripts/add-author/add-author.sh" "/usr/local/bin/add-author"
 echo "Done unpacking to /usr/local/bin"
