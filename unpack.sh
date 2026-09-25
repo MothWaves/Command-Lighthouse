@@ -13,4 +13,6 @@ echo "Unpacking ./Common/Scripts/oldify/oldify.sh..."
 $copy ./Common/Scripts/oldify/oldify.sh /usr/local/bin/oldify
 echo "Unpacking ./Data Handling/Scripts/add-author/add-author.sh..."
 $copy "./Data Handling/Scripts/add-author/add-author.sh" "/usr/local/bin/add-author"
+echo "Unpacking ./Data Handling/Scripts/add-author/add-comment.sh..."
+$copy "./Data Handling/Scripts/add-comment/add-comment.sh" "/usr/local/bin/add-comment"
 echo "Done unpacking to /usr/local/bin"

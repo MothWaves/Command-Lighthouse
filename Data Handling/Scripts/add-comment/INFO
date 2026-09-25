@@ -1,0 +1,4 @@
+Copy of the add-author script, but for Comments instead of authors.
+
+It will add the given user input to the following tags:
+Exif.Photo.UserComment
