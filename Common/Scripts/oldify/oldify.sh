@@ -9,6 +9,10 @@
 for var in "$@"
 do
 	if [ -e "$var" ]; then
+		if [ -e "$var.old" ]; then
+			echo "$var.old already found. Oldifying that one first."
+			oldify "$var.old"
+		fi
 		echo "Oldifying $var..."
 		mv "$var" "$var.old"
 	else
